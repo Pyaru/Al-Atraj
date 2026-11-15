@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Al Atraj Trading Est. | Curtains, Sofas and Carpets in Muscat, Oman</title>
+<meta name="description" content="Curtains, sofas and carpets in Muscat, Oman. Get a price estimate, book a visit, and order on WhatsApp.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2310302B'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' fill='%23D6A94E' font-family='sans-serif' font-weight='700'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+:root{
+  --ink:#10302B; --ink-2:#1B4E46; --ink-3:#0B2420;
+  --ground:#F1F3F2; --sage:#DDE6E2; --white:#FFFFFF;
+  --line:#C5D1CC; --muted:#4A5F5A; --dim:#9DB5AE; --soft:#C9D6D1;
+  --brass:#D6A94E; --brass-d:#8A5F12; --green:#12804A; --pill-line:#8DA39B;
+  --head:'Bricolage Grotesque','DM Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%}
+a{color:inherit}
+a:hover{opacity:.88}
+a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--brass);outline-offset:3px}
+h1,h2,h3{font-family:var(--head);margin:0}
+p{margin:0}
+[hidden]{display:none!important}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+.sec{padding-block:72px}
+.dark{background:var(--ink);color:var(--ground)}
+.sage{background:var(--sage)}
+.eyebrow{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass-d);font-weight:500}
+.dark .eyebrow{color:var(--brass)}
+.h2{font-size:clamp(28px,4vw,44px);line-height:1.1;font-weight:700;text-wrap:balance}
+.head{display:flex;flex-direction:column;gap:12px;max-width:640px;margin-bottom:40px}
+.lead{font-size:17px;color:var(--muted)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 24px;border-radius:4px;font-weight:700;font-size:16px;text-decoration:none;text-align:center;border:2px solid transparent;cursor:pointer;font-family:inherit}
+.btn-wa{background:var(--green);color:#fff}
+.btn-ink{background:var(--ink);color:var(--ground)}
+.btn-ghost{border-color:var(--brass);color:var(--ground)}
+.btn-lg{min-height:52px;padding:0 28px}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{min-height:44px;padding:0 16px;font:inherit;font-weight:700;cursor:pointer;border-radius:4px;background:var(--white);color:var(--ink);border:2px solid var(--pill-line)}
+.pill[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+
+/* header */
+.site{background:var(--ink);color:var(--ground);position:sticky;top:0;z-index:20}
+.site .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 24px;padding-top:10px;padding-bottom:10px}
+.brand{display:flex;flex-direction:column;text-decoration:none;gap:2px}
+.brand b{font-family:var(--head);font-size:22px}
+.brand span{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass)}
+.nav{display:flex;flex-wrap:wrap;align-items:center;gap:0 22px}
+.nav a{display:inline-flex;align-items:center;min-height:44px;text-decoration:none;font-size:15px}
+.nav a.btn{min-height:44px;padding:0 18px;font-size:15px}
+
+/* hero */
+.hero .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:48px;padding-top:48px;padding-bottom:72px}
+.hero-copy{flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:24px}
+.hero h1{font-size:clamp(38px,6vw,68px);line-height:1.02;font-weight:700;text-wrap:balance}
+.hero p.sub{max-width:52ch;font-size:18px;line-height:1.55;color:var(--soft)}
+.row{display:flex;flex-wrap:wrap;gap:12px}
+.mosaic{flex:1 1 340px;min-width:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:170px 170px;gap:12px}
+.mosaic>div{position:relative;overflow:hidden;border-radius:4px}
+.m-curtain{grid-row:span 2;background:repeating-linear-gradient(90deg,#DCE3DF 0,#F3F6F4 14px,#BFCCC6 28px)}
+.m-curtain i{position:absolute;top:16px;left:10px;right:10px;height:6px;border-radius:3px;background:var(--brass)}
+.m-sofa{background:var(--ink-2)}
+.m-sofa i{position:absolute;display:block}
+.m-carpet{background:repeating-linear-gradient(45deg,#7A2E26 0,#7A2E26 8px,#66251E 8px,#66251E 16px)}
+.m-carpet i{position:absolute;display:block}
+
+/* collections */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+.card{min-width:0;background:var(--white);border:1px solid var(--line);border-radius:4px;overflow:hidden;display:flex;flex-direction:column}
+.band{height:14px;background:var(--ink)}
+.band-curtain{background:repeating-linear-gradient(90deg,#DCE3DF 0,#F3F6F4 8px,#BFCCC6 16px)}
+.band-sofa{background:#6E9186}
+.band-carpet{background:repeating-linear-gradient(45deg,#7A2E26 0,#7A2E26 6px,#66251E 6px,#66251E 12px)}
+.card-body{padding:28px;display:flex;flex-direction:column;gap:16px;flex:1}
+.card h3{font-size:28px;font-weight:700}
+.card p{color:var(--muted)}
+.card ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.card .from{margin-top:auto;padding-top:8px;font-weight:700;color:var(--ink)}
+.card .btn{margin-top:0}
+.card .from+.btn,.card ul+.btn{margin-top:auto}
+
+/* estimator + booking panels */
+.two{display:flex;flex-wrap:wrap;gap:24px;align-items:stretch}
+.panel{box-sizing:border-box;padding:28px;border-radius:4px;display:flex;flex-direction:column;gap:24px;min-width:0}
+.panel.light{flex:1 1 360px;background:var(--white);border:1px solid var(--line)}
+.panel.ink{flex:1 1 320px;background:var(--ink);color:var(--ground);gap:16px}
+.lab{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.ink .lab{color:var(--brass)}
+.field{display:flex;flex-direction:column;gap:12px}
+.field .line{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-weight:700}
+.field .line span:last-child{font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;margin:0;min-height:44px;accent-color:var(--ink)}
+.big{font-family:var(--head);font-size:clamp(32px,5vw,50px);line-height:1.05;font-weight:700;font-variant-numeric:tabular-nums}
+.rule{height:1px;background:#2F5A52}
+.incl{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.incl li{display:flex;gap:12px;align-items:center}
+.incl li::before{content:"";flex:none;width:8px;height:8px;background:var(--brass)}
+.small{font-size:14px;color:var(--dim)}
+.dim{color:var(--soft)}
+.ink .btn{margin-top:auto}
+.days{display:grid;grid-template-columns:repeat(auto-fit,minmax(84px,1fr));gap:8px}
+.day{min-height:56px;padding:6px 8px;line-height:1.25;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.day span:first-child{font-weight:700}
+.day span:last-child{font-size:14px;font-weight:400}
+.sum{font-family:var(--head);font-size:26px;line-height:1.2;font-weight:700}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:32px}
+.step{border-top:3px solid var(--ink);padding-top:16px;display:flex;flex-direction:column;gap:8px}
+.step .n{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--brass-d);font-weight:700}
+.step h3{font-size:22px;font-weight:700}
+.step p{color:var(--muted)}
+
+/* gallery */
+.gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:24px}
+.gal figure{margin:0;display:flex;flex-direction:column;gap:8px}
+.gal img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:4px;background:var(--line);display:block}
+.gal figcaption{font-size:14px;color:var(--muted)}
+
+/* reviews */
+.rev{background:var(--white);border:1px solid var(--line);border-radius:4px;padding:28px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.rev p{font-size:17px}
+.rev b{font-weight:700}
+
+/* faq */
+.faq-wrap{display:flex;flex-wrap:wrap;gap:40px 64px}
+.faq-wrap .head{flex:1 1 280px;margin:0;align-self:flex-start}
+.faq{flex:2 1 420px;min-width:0;border-bottom:1px solid var(--line)}
+.faq details{border-top:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;min-height:64px;padding:12px 0;display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:18px;font-weight:700}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:24px;color:var(--brass-d);flex:none}
+.faq details[open] summary::after{content:"\2212"}
+.faq details p{padding:0 40px 20px 0;color:var(--muted);max-width:60ch}
+
+/* visit */
+.visit .wrap{display:flex;flex-wrap:wrap;gap:48px}
+.visit-info{flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:24px}
+.info{display:flex;flex-direction:column;gap:16px}
+.info div{display:flex;flex-direction:column;gap:2px}
+.info small{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.info span{font-size:18px;font-variant-numeric:tabular-nums}
+.cta-box{flex:1 1 320px;min-width:0;align-self:flex-start;padding:32px;background:var(--ink-2);border-radius:4px;display:flex;flex-direction:column;gap:16px}
+.cta-box h3{font-size:26px;font-weight:700}
+
+footer{background:var(--ink-3);color:var(--dim);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;padding-top:24px;padding-bottom:24px}
+
+/* floating whatsapp */
+.fab{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:30;display:inline-flex;align-items:center;min-height:52px;padding:0 22px;background:var(--green);color:#fff;font-weight:700;text-decoration:none;border-radius:999px;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="site">
+<div class="wrap">
+<a class="brand" href="#top"><b>Al Atraj Trading</b><span>Est. · Muscat, Oman</span></a>
+<nav class="nav" aria-label="Main">
+<a href="#collections">Collections</a>
+<a href="#estimate">Price estimate</a>
+<a href="#book">Book a visit</a>
+<a href="#faq">FAQ</a>
+<a class="btn btn-wa" data-wa="Hello Al Atraj Trading, I would like to ask about an order.">Order on WhatsApp</a>
+</nav>
+</div>
+</header>
+
+<main id="top">
+
+<section class="hero dark">
+<div class="wrap">
+<div class="hero-copy">
+<p class="eyebrow">Home furnishing in Muscat</p>
+<h1>Curtains, sofas and carpets for every room in the house.</h1>
+<p class="sub">Visit our shop in Muscat, or send photos and measurements of your room on WhatsApp. We reply with options and prices.</p>
+<div class="row">
+<a class="btn btn-wa btn-lg" data-wa="Hello Al Atraj Trading, I would like to ask about an order.">Order on WhatsApp</a>
+<a class="btn btn-ghost btn-lg" href="#estimate">Get a price estimate</a>
+</div>
+</div>
+<div class="mosaic" aria-hidden="true">
+<div class="m-curtain"><i></i></div>
+<div class="m-sofa">
+<i style="top:26%;left:18%;right:18%;height:34%;border-radius:14px 14px 0 0;background:#9DBBB1"></i>
+<i style="top:40%;left:8%;width:14%;height:38%;border-radius:12px;background:#7FA195"></i>
+<i style="top:40%;right:8%;width:14%;height:38%;border-radius:12px;background:#7FA195"></i>
+<i style="top:54%;left:18%;right:18%;height:24%;border-radius:6px;background:#B4CCC4"></i>
+<i style="top:78%;left:16%;width:4%;height:8%;background:#D6A94E"></i>
+<i style="top:78%;right:16%;width:4%;height:8%;background:#D6A94E"></i>
+</div>
+<div class="m-carpet">
+<i style="inset:12px;border:2px solid #D6A94E"></i>
+<i style="inset:24px;border:1px solid rgba(214,169,78,.6)"></i>
+<i style="left:50%;top:50%;width:36px;height:36px;margin:-18px 0 0 -18px;transform:rotate(45deg);border:2px solid #D6A94E"></i>
+</div>
+</div>
+</div>
+</section>
+
+<section id="collections" class="sec">
+<div class="wrap">
+<div class="head">
+<p class="eyebrow">Collections</p>
+<h2 class="h2">Three things we know well.</h2>
+<p class="lead">Tell us the room and the size. We will show you what fits.</p>
+</div>
+<div class="cards" id="cards"></div>
+</div>
+</section>
+
+<section id="estimate" class="sec sage">
+<div class="wrap">
+<div class="head">
+<p class="eyebrow">Price estimate</p>
+<h2 class="h2">Every price, for your window and your floor.</h2>
+<p class="lead">Pick what you need and set the size. The estimate updates as you move the sliders.</p>
+</div>
+<div class="two">
+<div class="panel light">
+<div class="field">
+<span class="lab">What do you need?</span>
+<div class="pills" id="estTypes"></div>
+</div>
+<div class="field">
+<div class="line"><label for="estW" id="estWL">Window width</label><span id="estWV"></span></div>
+<input id="estW" type="range" step="10">
+</div>
+<div class="field">
+<div class="line"><label for="estH" id="estHL">Curtain drop (height)</label><span id="estHV"></span></div>
+<input id="estH" type="range" step="10">
+</div>
+</div>
+<div class="panel ink">
+<span class="lab">Your estimate</span>
+<span class="big" id="estPrice"></span>
+<span class="dim" id="estSum"></span>
+<div class="rule"></div>
+<div class="field" style="gap:10px">
+<span class="lab" style="color:var(--dim)">The price includes</span>
+<ul class="incl" id="estIncl"></ul>
+</div>
+<p class="small">This is an estimate. We confirm the final price after checking your measurements.</p>
+<a class="btn btn-wa btn-lg" id="estWa">Send this estimate on WhatsApp</a>
+</div>
+</div>
+</div>
+</section>
+
+<section id="how" class="sec">
+<div class="wrap">
+<div class="head">
+<p class="eyebrow">How to order</p>
+<h2 class="h2">From a photo on your phone to a finished room.</h2>
+</div>
+<div class="steps">
+<div class="step"><p class="n">Step 1</p><h3>Message us</h3><p>Send photos of the room and your measurements on WhatsApp, or come to the shop.</p></div>
+<div class="step"><p class="n">Step 2</p><h3>Choose</h3><p>Pick fabric, colour and style from our stock, in person or from photos we send you.</p></div>
+<div class="step"><p class="n">Step 3</p><h3>Confirm</h3><p>We send you the price and how long it will take. You say yes when you are happy.</p></div>
+<div class="step"><p class="n">Step 4</p><h3>Receive</h3><p>Collect your order from the shop, or ask us about delivery to your address.</p></div>
+</div>
+</div>
+</section>
+
+<section id="work" class="sec sage" hidden>
+<div class="wrap">
+<div class="head" style="margin-bottom:0">
+<p class="eyebrow">Our work</p>
+<h2 class="h2">Rooms we have furnished.</h2>
+</div>
+<div class="pills" id="galTabs" style="margin-top:32px"></div>
+<div class="gal" id="gal"></div>
+</div>
+</section>
+
+<section id="reviews" class="sec" hidden>
+<div class="wrap">
+<div class="head">
+<p class="eyebrow">Reviews</p>
+<h2 class="h2">What our customers say.</h2>
+</div>
+<div class="cards" id="revs"></div>
+</div>
+</section>
+
+<section id="book" class="sec sage">
+<div class="wrap">
+<div class="head">
+<p class="eyebrow">Book a visit</p>
+<h2 class="h2">Pick a day and a time. We confirm on WhatsApp.</h2>
+</div>
+<div class="two" style="align-items:flex-start">
+<div class="panel light" style="flex-basis:420px">
+<div class="field"><span class="lab">What do you need?</span><div class="pills" id="svc"></div></div>
+<div class="field"><span class="lab">Pick a day</span><div class="days" id="days"></div></div>
+<div class="field"><span class="lab">Pick a time</span><div class="pills" id="slots"></div></div>
+</div>
+<div class="panel ink" style="flex-basis:300px">
+<span class="lab">Your request</span>
+<span class="sum" id="bookSum"></span>
+<p class="dim">Tapping the button opens WhatsApp with this request already written. We reply to confirm the time.</p>
+<a class="btn btn-wa btn-lg" id="bookWa">Send request on WhatsApp</a>
+</div>
+</div>
+</div>
+</section>
+
+<section id="faq" class="sec">
+<div class="wrap faq-wrap">
+<div class="head">
+<p class="eyebrow">Questions</p>
+<h2 class="h2">Questions people ask us.</h2>
+</div>
+<div class="faq" id="faqList"></div>
+</div>
+</section>
+
+<section id="visit" class="sec dark visit">
+<div class="wrap">
+<div class="visit-info">
+<p class="eyebrow">Visit us</p>
+<h2 class="h2">See the fabrics and feel the carpets in person.</h2>
+<div class="info">
+<div id="addrRow" hidden><small>Address</small><span id="addr"></span></div>
+<div id="hoursRow" hidden><small>Opening hours</small><span id="hours"></span></div>
+<div><small>WhatsApp</small><span id="phone"></span></div>
+</div>
+</div>
+<div class="cta-box">
+<h3>Not sure what fits?</h3>
+<p class="dim">Send a photo of your room and the wall or floor size. We will reply with ideas and prices.</p>
+<a class="btn btn-wa btn-lg" data-wa="Hello Al Atraj Trading, I would like to ask about an order.">Order on WhatsApp</a>
+</div>
+</div>
+</section>
+
+</main>
+
+<footer>
+<div class="wrap">
+<span>© Al Atraj Trading Est.</span>
+<span>Muscat, Sultanate of Oman</span>
+</div>
+</footer>
+
+<a class="fab" data-wa="Hello Al Atraj Trading, I would like to ask about an order.">WhatsApp</a>
+
+<script>
+/* ============================================================
+   SETTINGS: edit this block only.
+   1. Create a Google Sheet from al-atraj-data.xlsx (see the tab names below).
+   2. Share it: Share > General access > "Anyone with the link" > Viewer.
+   3. Paste the sheet ID here. It is the long text in the sheet URL:
+      https://docs.google.com/spreadsheets/d/<SHEET_ID>/edit
+   If SHEET_ID is empty or the sheet cannot be reached, the page shows
+   the built-in content below, so the site never appears broken.
+   ============================================================ */
+const CONFIG = {
+  SHEET_ID: '',
+  DEFAULT_WHATSAPP: '96800000000'
+};
+
+const DEFAULTS = {
+  settings: {
+    whatsapp: CONFIG.DEFAULT_WHATSAPP,
+    currency: 'OMR',
+    address: '',
+    hours: '',
+    booking_slots: '10:00 AM, 12:00 PM, 4:00 PM, 6:00 PM, 8:00 PM',
+    services: 'Visit the shop; Measuring at my home',
+    includes: 'Your chosen fabric or design; Made or cut to your size'
+  },
+  collections: [
+    { title: 'Curtains', description: 'Light for the day, privacy for the night. Made to the width and drop of your windows.', items: 'Sheer curtains; Blackout curtains; Double-layer sets; Rods and tracks', from_price: '', look: 'curtain' },
+    { title: 'Sofas', description: 'Seating for family evenings and for guests, from a single armchair to a full majlis.', items: 'Majlis seating sets; L-shaped corner sofas; Three-seater sofas; Armchairs', from_price: '', look: 'sofa' },
+    { title: 'Carpets', description: 'Warm, hard-wearing floors for the living room, the majlis and the prayer corner.', items: 'Living room carpets; Majlis carpets; Runners; Prayer mats', from_price: '', look: 'carpet' }
+  ],
+  prices: [
+    { label: 'Sheer curtains', carpet: false, rate: 0 },
+    { label: 'Blackout curtains', carpet: false, rate: 0 },
+    { label: 'Double-layer curtains', carpet: false, rate: 0 },
+    { label: 'Carpet', carpet: true, rate: 0 }
+  ],
+  gallery: [],
+  reviews: [],
+  faq: [
+    { question: 'How do I get a price?', answer: 'Use the price estimate above, or send photos and measurements on WhatsApp. We confirm the final price once we have checked the sizes.' },
+    { question: 'How do I measure my window?', answer: 'Measure the width of the area you want to cover, then the height from where the rod will sit down to the floor. If you are unsure, send us a photo and we will help.' },
+    { question: 'Can I see fabrics before I order?', answer: 'Yes. Visit the shop in Muscat, or ask us on WhatsApp and we will send photos of the fabrics.' }
+  ]
+};
+
+/* ---------- helpers ---------- */
+const $ = (s, r) => (r || document).querySelector(s);
+function el(tag, props, ...kids) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(props || {})) {
+    if (k === 'class') n.className = v;
+    else if (k.startsWith('on')) n.addEventListener(k.slice(2), v);
+    else n.setAttribute(k, v);
+  }
+  kids.flat().forEach((c) => n.append(c));
+  return n;
+}
+const list = (s) => String(s || '').split(s && String(s).includes(';') ? ';' : ',').map((x) => x.trim()).filter(Boolean);
+
+function parseCSV(text) {
+  const rows = []; let row = []; let cur = ''; let q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) {
+      if (c === '"') { if (text[i + 1] === '"') { cur += '"'; i++; } else q = false; }
+      else cur += c;
+    } else if (c === '"') q = true;
+    else if (c === ',') { row.push(cur); cur = ''; }
+    else if (c === '\n' || c === '\r') {
+      if (c === '\r' && text[i + 1] === '\n') i++;
+      row.push(cur); cur = ''; rows.push(row); row = [];
+    } else cur += c;
+  }
+  if (cur !== '' || row.length) { row.push(cur); rows.push(row); }
+  return rows;
+}
+function toObjects(rows) {
+  if (!rows.length) return [];
+  const head = rows[0].map((h) => h.trim().toLowerCase());
+  return rows.slice(1)
+    .filter((r) => r.some((x) => x.trim() !== ''))
+    .map((r) => Object.fromEntries(head.map((h, i) => [h, (r[i] || '').trim()])));
+}
+async function loadTab(name) {
+  const url = 'https://docs.google.com/spreadsheets/d/' + encodeURIComponent(CONFIG.SHEET_ID) +
+    '/gviz/tq?tqx=out:csv&headers=1&sheet=' + encodeURIComponent(name);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(name + ': ' + res.status);
+  return toObjects(parseCSV(await res.text()));
+}
+function safeUrl(u) {
+  const t = String(u || '').trim();
+  if (!t || /^(javascript|data|vbscript):/i.test(t)) return '';
+  const m = t.match(/drive\.google\.com\/file\/d\/([\w-]+)/) || t.match(/drive\.google\.com\/open\?id=([\w-]+)/);
+  if (m) return 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w1200';
+  return t;
+}
+
+/* ---------- state ---------- */
+let data = structuredClone(DEFAULTS);
+const state = { est: { i: 0, w: 300, h: 250 }, tab: 'All', svc: 0, day: 1, slot: 1 };
+
+const digits = () => {
+  let d = String(data.settings.whatsapp || '').replace(/\D/g, '');
+  if (d.length === 8) d = '968' + d;
+  return d;
+};
+const wa = (text) => 'https://wa.me/' + digits() + '?text=' + encodeURIComponent(text);
+const cur = () => data.settings.currency || 'OMR';
+
+function mergeSheet(got) {
+  const d = structuredClone(DEFAULTS);
+  (got.settings || []).forEach((r) => { if (r.key && r.value !== '') d.settings[r.key.trim().toLowerCase()] = r.value; });
+  if (got.collections && got.collections.length) d.collections = got.collections;
+  if (got.prices && got.prices.length) {
+    d.prices = got.prices.map((r) => ({ label: r.label, carpet: /^carpet/i.test(r.kind || ''), rate: parseFloat(r.rate) || 0 })).filter((p) => p.label);
+  }
+  if (got.gallery && got.gallery.length) d.gallery = got.gallery.filter((g) => safeUrl(g.image));
+  if (got.reviews && got.reviews.length) d.reviews = got.reviews.filter((r) => r.text);
+  if (got.faq && got.faq.length) d.faq = got.faq.filter((f) => f.question && f.answer);
+  return d;
+}
+
+/* ---------- rendering ---------- */
+function renderLinks() {
+  document.querySelectorAll('[data-wa]').forEach((a) => a.setAttribute('href', wa(a.getAttribute('data-wa'))));
+  const d = digits();
+  const local = d.startsWith('968') ? d.slice(3) : d;
+  $('#phone').textContent = '+968 ' + local.slice(0, 4) + ' ' + local.slice(4);
+}
+function renderVisit() {
+  const s = data.settings;
+  $('#addrRow').hidden = !s.address; $('#addr').textContent = s.address || '';
+  $('#hoursRow').hidden = !s.hours; $('#hours').textContent = s.hours || '';
+}
+function renderCollections() {
+  const box = $('#cards'); box.replaceChildren();
+  data.collections.forEach((c) => {
+    const look = ['curtain', 'sofa', 'carpet'].includes((c.look || '').toLowerCase()) ? (c.look || '').toLowerCase() : '';
+    const body = el('div', { class: 'card-body' }, el('h3', {}, c.title), el('p', {}, c.description));
+    const items = list(c.items);
+    if (items.length) body.append(el('ul', {}, items.map((x) => el('li', {}, x))));
+    if (c.from_price) body.append(el('p', { class: 'from' }, 'From ' + cur() + ' ' + c.from_price));
+    body.append(el('a', { class: 'btn btn-ink', href: wa('Hello Al Atraj Trading, I am interested in ' + c.title.toLowerCase() + '.') }, 'Ask about ' + c.title.toLowerCase()));
+    box.append(el('article', { class: 'card' }, el('div', { class: 'band' + (look ? ' band-' + look : ''), 'aria-hidden': 'true' }), body));
+  });
+}
+function setEstDefaults() {
+  const t = data.prices[state.est.i] || data.prices[0];
+  state.est.w = t.carpet ? 200 : 300;
+  state.est.h = t.carpet ? 300 : 250;
+}
+function renderEstimator() {
+  if (state.est.i >= data.prices.length) { state.est.i = 0; setEstDefaults(); }
+  const t = data.prices[state.est.i];
+  const box = $('#estTypes'); box.replaceChildren();
+  data.prices.forEach((p, i) => {
+    box.append(el('button', {
+      type: 'button', class: 'pill', 'aria-pressed': String(i === state.est.i),
+      onclick: () => { state.est.i = i; setEstDefaults(); renderEstimator(); }
+    }, p.label));
+  });
+  $('#estWL').textContent = t.carpet ? 'Carpet width' : 'Window width';
+  $('#estHL').textContent = t.carpet ? 'Carpet length' : 'Curtain drop (height)';
+  const w = $('#estW'); const h = $('#estH');
+  w.min = t.carpet ? 60 : 100; w.max = t.carpet ? 600 : 800; w.value = state.est.w;
+  h.min = t.carpet ? 60 : 150; h.max = t.carpet ? 800 : 400; h.value = state.est.h;
+  const inc = $('#estIncl'); inc.replaceChildren();
+  list(data.settings.includes).forEach((x) => inc.append(el('li', {}, x)));
+  updateEstimate();
+}
+function updateEstimate() {
+  const t = data.prices[state.est.i];
+  const { w, h } = state.est;
+  $('#estWV').textContent = w + ' cm';
+  $('#estHV').textContent = h + ' cm';
+  const sum = t.label + ' · ' + w + ' × ' + h + ' cm';
+  const hasRate = t.rate > 0;
+  const price = hasRate ? cur() + ' ' + (t.rate * w * h / 10000).toFixed(3) : 'Message us for a price';
+  $('#estPrice').textContent = price;
+  $('#estSum').textContent = sum;
+  $('#estWa').href = wa('Hello Al Atraj Trading, I would like a price for ' + sum + '.' + (hasRate ? ' The website estimate says ' + price + '.' : ''));
+}
+function renderGallery() {
+  const sec = $('#work');
+  const all = data.gallery;
+  sec.hidden = !all.length;
+  if (!all.length) return;
+  const cats = ['All'].concat([...new Set(all.map((g) => g.category).filter(Boolean))]);
+  if (!cats.includes(state.tab)) state.tab = 'All';
+  const tabs = $('#galTabs'); tabs.replaceChildren();
+  cats.forEach((c) => tabs.append(el('button', {
+    type: 'button', class: 'pill', 'aria-pressed': String(c === state.tab),
+    onclick: () => { state.tab = c; renderGallery(); }
+  }, c)));
+  const grid = $('#gal'); grid.replaceChildren();
+  all.filter((g) => state.tab === 'All' || g.category === state.tab).forEach((g) => {
+    const fig = el('figure', {}, el('img', { src: safeUrl(g.image), alt: g.caption || 'Our work', loading: 'lazy' }));
+    if (g.caption) fig.append(el('figcaption', {}, g.caption));
+    grid.append(fig);
+  });
+}
+function renderReviews() {
+  const sec = $('#reviews'); const box = $('#revs');
+  sec.hidden = !data.reviews.length;
+  box.replaceChildren();
+  data.reviews.forEach((r) => box.append(el('div', { class: 'rev' }, el('p', {}, r.text), r.name ? el('b', {}, r.name) : '')));
+}
+function renderFaq() {
+  const box = $('#faqList'); box.replaceChildren();
+  data.faq.forEach((f, i) => {
+    const d = el('details', {}, el('summary', {}, f.question), el('p', {}, f.answer));
+    if (i === 0) d.open = true;
+    box.append(d);
+  });
+}
+function renderBooking() {
+  const services = list(data.settings.services);
+  const slots = list(data.settings.booking_slots);
+  if (state.svc >= services.length) state.svc = 0;
+  if (state.slot >= slots.length) state.slot = 0;
+  const svc = $('#svc'); svc.replaceChildren();
+  services.forEach((s, i) => svc.append(el('button', { type: 'button', class: 'pill', 'aria-pressed': String(i === state.svc), onclick: () => { state.svc = i; renderBooking(); } }, s)));
+  const days = $('#days'); days.replaceChildren();
+  const now = new Date();
+  const dayText = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
+    const wd = d.toLocaleDateString('en-GB', { weekday: 'short' });
+    const dm = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    dayText.push(wd + ' ' + dm);
+    days.append(el('button', { type: 'button', class: 'pill day', 'aria-pressed': String(i === state.day), onclick: () => { state.day = i; renderBooking(); } }, el('span', {}, wd), el('span', {}, dm)));
+  }
+  const sl = $('#slots'); sl.replaceChildren();
+  slots.forEach((s, i) => sl.append(el('button', { type: 'button', class: 'pill', 'aria-pressed': String(i === state.slot), onclick: () => { state.slot = i; renderBooking(); } }, s)));
+  const summary = (services[state.svc] || 'Visit the shop') + ', ' + dayText[state.day] + (slots[state.slot] ? ' at ' + slots[state.slot] : '');
+  $('#bookSum').textContent = summary;
+  $('#bookWa').href = wa('Hello Al Atraj Trading, I would like to book: ' + summary + '.');
+}
+function renderAll() {
+  renderLinks(); renderVisit(); renderCollections(); renderEstimator();
+  renderGallery(); renderReviews(); renderFaq(); renderBooking();
+}
+
+/* ---------- start ---------- */
+$('#estW').addEventListener('input', (e) => { state.est.w = Number(e.target.value); updateEstimate(); });
+$('#estH').addEventListener('input', (e) => { state.est.h = Number(e.target.value); updateEstimate(); });
+renderAll();
+
+if (CONFIG.SHEET_ID) {
+  const names = ['Settings', 'Collections', 'Prices', 'Gallery', 'Reviews', 'FAQ'];
+  Promise.allSettled(names.map(loadTab)).then((res) => {
+    const got = {};
+    res.forEach((r, i) => { if (r.status === 'fulfilled') got[names[i].toLowerCase()] = r.value; else console.warn('Sheet tab not loaded:', names[i], r.reason); });
+    data = mergeSheet(got);
+    setEstDefaults();
+    renderAll();
+  });
+}
+</script>
+</body>
+</html>
