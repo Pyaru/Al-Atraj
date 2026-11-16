@@ -83,6 +83,9 @@ p{margin:0}
 .band-curtain{background:repeating-linear-gradient(90deg,#DCE3DF 0,#F3F6F4 8px,#BFCCC6 16px)}
 .band-sofa{background:#6E9186}
 .band-carpet{background:repeating-linear-gradient(45deg,#7A2E26 0,#7A2E26 6px,#66251E 6px,#66251E 12px)}
+.band-wallpaper{background:repeating-linear-gradient(90deg,#C9B58A 0,#C9B58A 10px,#E6DAB9 10px,#E6DAB9 12px)}
+.band-office{background:repeating-linear-gradient(90deg,#3E5C76 0,#3E5C76 14px,#2E4660 14px,#2E4660 16px)}
+.band-material{background:linear-gradient(90deg,#7A2E26 0 20%,#D6A94E 20% 40%,#6E9186 40% 60%,#3E5C76 60% 80%,#C9B58A 80% 100%)}
 .card-body{padding:28px;display:flex;flex-direction:column;gap:16px;flex:1}
 .card h3{font-size:28px;font-weight:700}
 .card p{color:var(--muted)}
@@ -458,14 +461,17 @@ const DEFAULTS = {
     currency: 'OMR',
     address: 'helld saad, opposite Allahabad hospital, ruwi, Muscat, oman',
     hours: '',
-    booking_slots: '9:00 AM, 1:00 PM, 5:00 PM, 10:00 PM, 8:00 PM',
+    booking_slots: '10:00 AM, 12:00 PM, 4:00 PM, 6:00 PM, 8:00 PM',
     services: 'Visit the shop; Measuring at my home',
     includes: 'Your chosen fabric or design; Made or cut to your size'
   },
   collections: [
     { title: 'Curtains', description: 'Light for the day, privacy for the night. Made to the width and drop of your windows.', items: 'Sheer curtains; Blackout curtains; Double-layer sets; Rods and tracks', from_price: '', look: 'curtain' },
     { title: 'Sofas', description: 'New sofas made to fit your room, in the fabric you choose. We also upholster sofas you already have.', items: 'New sofas made to your room size; Your choice of fabric and colour; Majlis sets and corner sofas; Upholstery of your existing sofa', from_price: '', look: 'sofa' },
-    { title: 'Carpets', description: 'Warm, hard-wearing floors for the living room, the majlis and the prayer corner.', items: 'Living room carpets; Majlis carpets; Runners; Prayer mats', from_price: '', look: 'carpet' }
+    { title: 'Carpets', description: 'Warm, hard-wearing floors for the living room, the majlis and the prayer corner.', items: 'Living room carpets; Majlis carpets; Runners; Prayer mats', from_price: '', look: 'carpet' },
+    { title: 'Wallpaper', description: 'Fresh walls for the living room, the bedroom and the majlis.', items: 'Plain designs; Patterned designs; Textured finishes; Fixing on request', from_price: '', look: 'wallpaper' },
+    { title: 'Office items', description: 'Furniture and fittings to fit out an office.', items: 'Office desks; Office chairs; Meeting room furniture', from_price: '', look: 'office' },
+    { title: 'Materials', description: 'Fabrics and materials for your own project.', items: 'Curtain fabrics; Sofa fabrics; Upholstery materials', from_price: '', look: 'material' }
   ],
   prices: [
     { label: 'Sheer curtains', carpet: false, rate: 0 },
@@ -598,7 +604,7 @@ function renderVisit() {
   const s = data.settings;
   $('#addrRow').hidden = !s.address; $('#addr').textContent = s.address || '';
   $('#hoursRow').hidden = !s.hours; $('#hours').textContent = s.hours || '';
-    const maps = /^https?:\/\//i.test(String(s.maps_link || '').trim()) ? String(s.maps_link).trim() : '';
+  const maps = /^https?:\/\//i.test(String(s.maps_link || '').trim()) ? String(s.maps_link).trim() : '';
   $('#mapBtn').hidden = !maps; if (maps) $('#mapBtn').href = maps;
   let c = String(s.call_number || '').replace(/\D/g, '');
   if (c.length === 8) c = '968' + c;
@@ -612,7 +618,7 @@ function renderVisit() {
 function renderCollections() {
   const box = $('#cards'); box.replaceChildren();
   data.collections.forEach((c) => {
-    const look = ['curtain', 'sofa', 'carpet'].includes((c.look || '').toLowerCase()) ? (c.look || '').toLowerCase() : '';
+    const look = ['curtain', 'sofa', 'carpet', 'wallpaper', 'office', 'material'].includes((c.look || '').toLowerCase()) ? (c.look || '').toLowerCase() : '';
     const body = el('div', { class: 'card-body' }, el('h3', {}, c.title), el('p', {}, c.description));
     const items = list(c.items);
     if (items.length) body.append(el('ul', {}, items.map((x) => el('li', {}, x))));
@@ -670,10 +676,10 @@ function renderGallery() {
     onclick: () => { state.tab = c; renderGallery(); }
   }, c)));
   const grid = $('#gal'); grid.replaceChildren();
-   let shown;
+  let shown;
   if (state.tab === 'All') {
     shown = cats.slice(1).map((c) => {
-  const items = all.filter((g) => g.category === c);
+      const items = all.filter((g) => g.category === c);
       return { g: items[0], label: c + (items.length > 1 ? ' · ' + items.length + ' photos' : '') };
     });
   } else {
@@ -684,7 +690,7 @@ function renderGallery() {
       el('img', { src: safeUrl(it.g.image), alt: it.g.caption || it.g.category, loading: 'lazy' }));
     const fig = el('figure', {}, btn);
     if (it.label) fig.append(el('figcaption', {}, it.label));
-  grid.append(fig);
+    grid.append(fig);
   });
 }
 
