@@ -64,6 +64,9 @@ p{margin:0}
 .row{display:flex;flex-wrap:wrap;gap:12px}
 .mosaic{flex:1 1 340px;min-width:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:170px 170px;gap:12px}
 .mosaic>div{position:relative;overflow:hidden;border-radius:4px}
+.m-photo{background:var(--ink-2)}
+.m-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.m-tall{grid-row:span 2}
 .m-curtain{grid-row:span 2;background:repeating-linear-gradient(90deg,#DCE3DF 0,#F3F6F4 14px,#BFCCC6 28px)}
 .m-curtain i{position:absolute;top:16px;left:10px;right:10px;height:6px;border-radius:3px;background:var(--brass)}
 .m-sofa{background:var(--ink-2)}
@@ -187,7 +190,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
 <a class="btn btn-ghost btn-lg" href="#estimate">Get a price estimate</a>
 </div>
 </div>
-<div class="mosaic" aria-hidden="true">
+<div class="mosaic" id="mosaic" aria-hidden="true">
 <div class="m-curtain"><i></i></div>
 <div class="m-sofa">
 <i style="top:26%;left:18%;right:18%;height:34%;border-radius:14px 14px 0 0;background:#9DBBB1"></i>
@@ -448,7 +451,8 @@ function safeUrl(u) {
   if (!t || /^(javascript|data|vbscript):/i.test(t)) return '';
   const m = t.match(/drive\.google\.com\/file\/d\/([\w-]+)/) || t.match(/drive\.google\.com\/open\?id=([\w-]+)/);
   if (m) return 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w1200';
-  return t;
+  if (!/^(https?:)?\/\//i.test(t) && t.charAt(0) !== '/' && t.indexOf('/') === -1) return encodeURI('images/' + t);
+  return /^(https?:)?\/\//i.test(t) ? t : encodeURI(t);
 }
 
 /* ---------- state ---------- */
@@ -482,6 +486,14 @@ function renderLinks() {
   const d = digits();
   const local = d.startsWith('968') ? d.slice(3) : d;
   $('#phone').textContent = '+968 ' + local.slice(0, 4) + ' ' + local.slice(4);
+}
+function renderHero() {
+  const s = data.settings;
+  let imgs = [s.hero_image_1, s.hero_image_2, s.hero_image_3].map(safeUrl).filter(Boolean);
+  if (imgs.length < 3) imgs = data.gallery.slice(0, 3).map((g) => safeUrl(g.image));
+  if (imgs.length < 3) return;
+  const box = $('#mosaic'); box.replaceChildren(); box.removeAttribute('aria-hidden');
+  imgs.slice(0, 3).forEach((u, i) => box.append(el('div', { class: 'm-photo' + (i === 0 ? ' m-tall' : '') }, el('img', { src: u, alt: '' }))));
 }
 function renderVisit() {
   const s = data.settings;
@@ -593,7 +605,7 @@ function renderBooking() {
   $('#bookWa').href = wa('Hello Al Atraj Trading, I would like to book: ' + summary + '.');
 }
 function renderAll() {
-  renderLinks(); renderVisit(); renderCollections(); renderEstimator();
+  renderLinks(); renderHero(); renderVisit(); renderCollections(); renderEstimator();
   renderGallery(); renderReviews(); renderFaq(); renderBooking();
 }
 
