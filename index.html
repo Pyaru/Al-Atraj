@@ -49,7 +49,9 @@ p{margin:0}
 /* header */
 .site{background:var(--ink);color:var(--ground);position:sticky;top:0;z-index:20}
 .site .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 24px;padding-top:10px;padding-bottom:10px}
-.brand{display:flex;flex-direction:column;text-decoration:none;gap:2px}
+.brand{display:flex;flex-direction:row;align-items:center;text-decoration:none;gap:12px}
+.brand .bt{display:flex;flex-direction:column;gap:2px}
+.logo{height:44px;width:auto;background:#fff;border-radius:4px;display:block}
 .brand b{font-family:var(--head);font-size:22px}
 .brand span{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass)}
 .nav{display:flex;flex-wrap:wrap;align-items:center;gap:0 22px}
@@ -176,7 +178,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
 
 <header class="site">
 <div class="wrap">
-<a class="brand" href="#top"><b>Al Atraj Trading Est.</b><span>Ruwi, Muscat, Oman</span></a>
+<a class="brand" href="#top"><img class="logo" id="brandLogo" alt="" hidden><div class="bt"><b id="brandName">Al Atraj Trading Est.</b><span id="brandTag">Ruwi, Muscat, Oman</span></div></a>
 <nav class="nav" aria-label="Main">
 <a href="#collections">Collections</a>
 <a href="#estimate">Price estimate</a>
@@ -359,7 +361,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
 
 <footer>
 <div class="wrap">
-<span>© Al Atraj Trading Est.</span>
+<span id="footName">© Al Atraj Trading Est.</span>
 <span>Muscat, Sultanate of Oman</span>
 </div>
 </footer>
@@ -391,6 +393,10 @@ const CONFIG = {
 const DEFAULTS = {
   settings: {
     whatsapp: CONFIG.DEFAULT_WHATSAPP,
+    brand_name: 'Al Atraj Trading Est.',
+    brand_tagline: 'Ruwi, Muscat, Oman',
+    logo: 'logo.png',
+    favicon: 'favicon.png',
     currency: 'OMR',
     address: 'helld saad, opposite Allahabad hospital, ruwi, Muscat, oman',
     hours: '',
@@ -503,6 +509,24 @@ function renderLinks() {
   const d = digits();
   const local = d.startsWith('968') ? d.slice(3) : d;
   $('#phone').textContent = '+968 ' + local.slice(0, 4) + ' ' + local.slice(4);
+}
+function renderBrand() {
+  const s = data.settings;
+  $('#brandName').textContent = s.brand_name;
+  $('#brandTag').textContent = s.brand_tagline;
+  $('#footName').textContent = '© ' + s.brand_name;
+  document.title = s.brand_name + ' | Curtains, Sofas and Carpets in Muscat, Oman';
+  const logo = $('#brandLogo');
+  if (s.logo) {
+    logo.onload = () => { logo.hidden = false; };
+    logo.onerror = () => { logo.hidden = true; };
+    logo.src = safeUrl(s.logo);
+  }
+  if (s.favicon) {
+    const probe = new Image();
+    probe.onload = () => { const l = document.querySelector('link[rel="icon"]'); if (l) { l.type = 'image/png'; l.href = probe.src; } };
+    probe.src = safeUrl(s.favicon);
+  }
 }
 function renderHero() {
   const s = data.settings;
@@ -662,7 +686,7 @@ function renderBooking() {
   $('#bookWa').href = wa('Hello Al Atraj Trading, I would like to book: ' + summary + '.');
 }
 function renderAll() {
-  renderLinks(); renderHero(); renderVisit(); renderCollections(); renderEstimator();
+  renderLinks(); renderBrand(); renderHero(); renderVisit(); renderCollections(); renderEstimator();
   renderGallery(); renderReviews(); renderFaq(); renderBooking();
 }
 
