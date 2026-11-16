@@ -128,6 +128,13 @@ input[type=range]{width:100%;margin:0;min-height:44px;accent-color:var(--ink)}
 .gal figure{margin:0;display:flex;flex-direction:column;gap:8px}
 .gal img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:4px;background:var(--line);display:block}
 .gal figcaption{font-size:14px;color:var(--muted)}
+.biz{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
+.biz article{min-width:0;background:var(--ink-2);border-radius:4px;padding:28px;display:flex;flex-direction:column;gap:14px}
+.biz h3{font-size:26px;font-weight:700}
+.biz ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;color:var(--soft)}
+.qbar{margin-top:40px;padding-top:32px;border-top:1px solid #2F5A52;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px}
+.qtext{flex:1 1 360px;min-width:0;display:flex;flex-direction:column;gap:8px;max-width:640px}
+.qtext h3{font-size:26px;font-weight:700}
 .zoom{padding:0;border:0;background:none;cursor:zoom-in;display:block;width:100%;border-radius:4px}
 .lb{position:fixed;inset:0;z-index:50;background:rgba(7,22,19,.94);display:flex;align-items:center;justify-content:center;padding:64px max(16px,env(safe-area-inset-right,0px)) 32px max(16px,env(safe-area-inset-left,0px))}
 .lb figure{margin:0;max-width:min(1100px,100%);display:flex;flex-direction:column;align-items:center;gap:12px}
@@ -181,6 +188,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
 <a class="brand" href="#top"><img class="logo" id="brandLogo" alt="" hidden><div class="bt"><b id="brandName">Al Atraj Trading Est.</b><span id="brandTag">Ruwi, Muscat, Oman</span></div></a>
 <nav class="nav" aria-label="Main">
 <a href="#collections">Collections</a>
+<a href="#business">For businesses</a>
 <a href="#estimate">Price estimate</a>
 <a href="#book">Book a visit</a>
 <a href="#faq">FAQ</a>
@@ -229,6 +237,49 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
 <p class="lead">Tell us the room and the size. We will show you what fits.</p>
 </div>
 <div class="cards" id="cards"></div>
+</div>
+</section>
+
+<section id="business" class="sec dark">
+<div class="wrap">
+<div class="head">
+<p class="eyebrow">For businesses</p>
+<h2 class="h2">Hotels, mosques and offices.</h2>
+<p class="lead" style="color:var(--soft)">We supply and fix carpets, curtains and furniture for larger projects, room by room. Send us your list and we reply with a written quotation.</p>
+</div>
+<div class="biz">
+<article>
+<h3>Hotels</h3>
+<ul>
+<li>Carpets for guest rooms, suites and family rooms</li>
+<li>Curtain sets: curtain, blackout and plain sheer</li>
+<li>Sofa upholstery with fabric</li>
+</ul>
+</article>
+<article>
+<h3>Mosques</h3>
+<ul>
+<li>Mosque carpets for prayer halls</li>
+<li>Curtains for windows and doors</li>
+<li>Supply and fixing by our team</li>
+</ul>
+</article>
+<article>
+<h3>Offices</h3>
+<ul>
+<li>Carpets for offices and meeting rooms</li>
+<li>Curtains and Roman blinds</li>
+<li>Supply and fixing by our team</li>
+</ul>
+</article>
+</div>
+<div class="qbar">
+<div class="qtext">
+<h3>Ask for a quotation</h3>
+<p class="dim">Tell us the project, the number of rooms and what you need. Our quotation shows each item, the supply and fixing, and VAT.</p>
+</div>
+<a class="btn btn-wa btn-lg" data-wa="Hello Al Atraj Trading, I would like to request a quotation.&#10;&#10;Company / project name:&#10;Location:&#10;What we need (carpet / curtains / upholstery):&#10;Number of rooms or area (m2):">Request a quotation</a>
+</div>
 </div>
 </section>
 
@@ -346,7 +397,12 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
 <div class="info">
 <div id="addrRow" hidden><small>Address</small><span id="addr"></span></div>
 <div id="hoursRow" hidden><small>Opening hours</small><span id="hours"></span></div>
+<div id="callRow" hidden><small>Phone</small><span id="callText"></span></div>
 <div><small>WhatsApp</small><span id="phone"></span></div>
+</div>
+<div class="row">
+<a class="btn btn-ghost btn-lg" id="mapBtn" target="_blank" rel="noopener" hidden>Get directions</a>
+<a class="btn btn-ghost btn-lg" id="callBtn" hidden>Call us</a>
 </div>
 </div>
 <div class="cta-box">
@@ -397,6 +453,8 @@ const DEFAULTS = {
     brand_tagline: 'Ruwi, Muscat, Oman',
     logo: 'logo.png',
     favicon: 'favicon.png',
+    maps_link: 'https://maps.app.goo.gl/hzGtF9C4GQAchkkq9',
+    call_number: '97657655',
     currency: 'OMR',
     address: 'helld saad, opposite Allahabad hospital, ruwi, Muscat, oman',
     hours: '',
@@ -406,7 +464,7 @@ const DEFAULTS = {
   },
   collections: [
     { title: 'Curtains', description: 'Light for the day, privacy for the night. Made to the width and drop of your windows.', items: 'Sheer curtains; Blackout curtains; Double-layer sets; Rods and tracks', from_price: '', look: 'curtain' },
-    { title: 'Sofas', description: 'Seating for family evenings and for guests, from a single armchair to a full majlis.', items: 'Majlis seating sets; L-shaped corner sofas; Three-seater sofas; Armchairs', from_price: '', look: 'sofa' },
+    { title: 'Sofas', description: 'New sofas made to fit your room, in the fabric you choose. We also upholster sofas you already have.', items: 'New sofas made to your room size; Your choice of fabric and colour; Majlis sets and corner sofas; Upholstery of your existing sofa', from_price: '', look: 'sofa' },
     { title: 'Carpets', description: 'Warm, hard-wearing floors for the living room, the majlis and the prayer corner.', items: 'Living room carpets; Majlis carpets; Runners; Prayer mats', from_price: '', look: 'carpet' }
   ],
   prices: [
@@ -540,6 +598,16 @@ function renderVisit() {
   const s = data.settings;
   $('#addrRow').hidden = !s.address; $('#addr').textContent = s.address || '';
   $('#hoursRow').hidden = !s.hours; $('#hours').textContent = s.hours || '';
+    const maps = /^https?:\/\//i.test(String(s.maps_link || '').trim()) ? String(s.maps_link).trim() : '';
+  $('#mapBtn').hidden = !maps; if (maps) $('#mapBtn').href = maps;
+  let c = String(s.call_number || '').replace(/\D/g, '');
+  if (c.length === 8) c = '968' + c;
+  $('#callBtn').hidden = !c; $('#callRow').hidden = !c;
+  if (c) {
+    $('#callBtn').href = 'tel:+' + c;
+    const loc = c.startsWith('968') ? c.slice(3) : c;
+    $('#callText').textContent = (c.startsWith('968') ? '+968 ' : '+') + (c.startsWith('968') ? loc.slice(0, 4) + ' ' + loc.slice(4) : c);
+  }
 }
 function renderCollections() {
   const box = $('#cards'); box.replaceChildren();
