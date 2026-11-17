@@ -2,7 +2,7 @@
    API_URL: the Web app URL you copy after deploying the Google Apps Script (see Code.gs).
    Leave API_URL empty and the page still works for printing and sharing, but it will not save. */
 window.OFFICE_CONFIG = {
-  API_URL: '',
+  API_URL: 'https://script.google.com/macros/s/AKfycbzuyyRXD6CCX33IEb95-FkSyEEXH5LAnW0dsMnZ9VZpoydLN0x0CLz5jvCml87oORKBGA/exec',
   VAT_RATE: 5,
   CURRENCY: 'OMR',
   COMPANY: {
