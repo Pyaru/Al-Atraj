@@ -138,7 +138,7 @@ input[type=range]{width:100%;margin:0;min-height:44px;accent-color:var(--ink);di
 .sum{font-family:var(--head);font-size:26px;line-height:1.2;font-weight:700}
 
 /* price list */
-.pl-cat{margin-top:32px}
+.pl-cat{margin-top:24px}
 .pl-cat h3{font-size:22px;font-weight:700;margin-bottom:8px}
 .pl-scroll{overflow-x:auto;border-top:3px solid var(--ink);background:var(--white)}
 .pl-table{width:100%;border-collapse:collapse;font-size:16px}
@@ -378,6 +378,7 @@ html[dir="rtl"] .card h3,html[dir="rtl"] .biz h3,html[dir="rtl"] .step h3{line-h
 <h2 class="h2" data-i18n="pl_h2">Our price list.</h2>
 <p class="lead" data-i18n="pl_lead">Prices in Omani Rial (OMR) for the most asked-for items.</p>
 </div>
+<div class="pills" id="plTabs"></div>
 <div id="plBox"></div>
 <div class="pl-note"><p data-i18n="pl_note">These are approximate prices. The exact price is confirmed when you visit the shop or contact us on WhatsApp.</p><a class="btn btn-wa" data-wa="order" data-i18n="order_wa">Order on WhatsApp</a></div>
 </div>
@@ -718,7 +719,7 @@ function safeUrl(u) {
 
 /* ---------- state ---------- */
 let data = structuredClone(DEFAULTS);
-const state = { est: { i: 0, w: 300, h: 250 }, tab: 'All', svc: 0, day: 1, slot: 1 };
+const state = { plCat: null, est: { i: 0, w: 300, h: 250 }, tab: 'All', svc: 0, day: 1, slot: 1 };
 
 const digits = () => {
   let d = String(data.settings.whatsapp || '').replace(/\D/g, '');
@@ -964,8 +965,16 @@ function renderPriceList() {
     if (!(k in idx)) { idx[k] = groups.length; groups.push({ r, rows: [] }); }
     groups[idx[k]].rows.push(r);
   });
+    if (state.plCat !== null && !groups.some((g) => (g.r.category || '') === state.plCat)) state.plCat = null;
+  const tabs = $('#plTabs'); tabs.replaceChildren();
+  const active = (g, i) => state.plCat === null ? i < 2 : (g.r.category || '') === state.plCat;
+  groups.forEach((g, i) => tabs.append(el('button', {
+    type: 'button', class: 'pill', 'aria-pressed': String(active(g, i)),
+    onclick: () => { state.plCat = g.r.category || ''; renderPriceList(); }
+  }, pick(g.r, 'category') || '-')));
   let n = 0;
-  groups.forEach((g) => {
+    groups.forEach((g, gi) => {
+    if (!active(g, gi)) { n += g.rows.length; return; }
     const head = el('tr', {}, el('th', {}, t('pl_sr')), el('th', {}, t('pl_desc')), el('th', {}, t('pl_unit')), el('th', { class: 'pr' }, t('pl_price')));
     const body = g.rows.map((r) => {
       n += 1;
