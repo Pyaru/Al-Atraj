@@ -9,6 +9,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 <script src="office-config.js"></script>
+<script src="config.js"></script>
+<script src="pricelist.js"></script>
 <style>
 :root{
   --ink:#10302B; --ink-2:#1B4E46; --ground:#EEF1F0; --white:#fff; --line:#C5D1CC;
@@ -184,7 +186,8 @@ label.f textarea{min-height:64px;resize:vertical}
 <div class="card">
 <h2>Items</h2>
 <div id="items"></div>
-<button type="button" class="btn add" id="addItem">+ Add item</button>
+<label class="f" style="margin-bottom:8px">Add from price list<select id="pricePick"><option value="">Choose an item…</option></select></label>
+<button type="button" class="btn add" id="addItem">+ Add blank item</button>
 <div class="totals" id="totals"></div>
 </div>
 
@@ -657,6 +660,75 @@ $('#gateForm').addEventListener('submit', async (e) => {
 });
 
 /* ---------- start ---------- */
+/* ---------- price list: built-in list, replaced by the sheet tab "PriceList" when it loads ---------- */
+let PRICES = [];
+function expandPrice(r) {
+  const prices = String(r.price).split('/').map((x) => x.trim()).filter(Boolean);
+  const m = String(r.item).match(/^(.*?):\s*(.*)$/);
+  const sizes = m ? m[2].split('/').map((x) => x.trim()) : [];
+  if (prices.length > 1 && m && sizes.length === prices.length) return prices.map((p, i) => ({ label: m[1] + ' ' + sizes[i], price: p, unit: r.unit }));
+  if (prices.length > 1) return prices.map((p) => ({ label: r.item + ' (' + p + ')', desc: r.item, price: p, unit: r.unit }));
+  return [{ label: r.item, price: prices[0] || '', unit: r.unit }];
+}
+function buildPricePick() {
+  const sel = $('#pricePick'); sel.length = 1; PRICES = [];
+  const groups = {};
+  (window.PRICE_LIST_ACTIVE || []).forEach((r) => {
+    const g = r.category || 'Other';
+    (groups[g] = groups[g] || []).push(...expandPrice(r));
+  });
+  Object.keys(groups).forEach((g) => {
+    const og = document.createElement('optgroup'); og.label = g;
+    groups[g].forEach((o) => {
+      PRICES.push(o);
+      const op = document.createElement('option'); op.value = String(PRICES.length - 1);
+      op.textContent = o.label + '  |  ' + o.price + ' ' + (o.unit || ''); og.append(op);
+    });
+    sel.append(og);
+  });
+}
+function parseCSV(text) {
+  const rows = []; let row = []; let cur = ''; let q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"') { if (text[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += c; }
+    else if (c === '"') q = true;
+    else if (c === ',') { row.push(cur); cur = ''; }
+    else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; row.push(cur); cur = ''; rows.push(row); row = []; }
+    else cur += c;
+  }
+  if (cur !== '' || row.length) { row.push(cur); rows.push(row); }
+  return rows;
+}
+async function loadPriceSheet() {
+  const id = window.SITE_CONFIG && window.SITE_CONFIG.SHEET_ID;
+  if (!id) return;
+  try {
+    const res = await fetch('https://docs.google.com/spreadsheets/d/' + encodeURIComponent(id) + '/gviz/tq?tqx=out:csv&headers=1&sheet=PriceList');
+    if (!res.ok) return;
+    const rows = parseCSV(await res.text());
+    const head = (rows[0] || []).map((h) => h.trim().toLowerCase());
+    const list = rows.slice(1).filter((r) => r.some((x) => x.trim() !== ''))
+      .map((r) => Object.fromEntries(head.map((h, i) => [h, (r[i] || '').trim()])))
+      .filter((r) => r.item && r.price && r.unit !== undefined);
+    if (list.length) { window.PRICE_LIST_ACTIVE = list; buildPricePick(); }
+  } catch (e) { /* keep the built-in list */ }
+}
+window.PRICE_LIST_ACTIVE = window.PRICE_LIST_DEFAULT || [];
+$('#pricePick').addEventListener('change', (e) => {
+  const o = PRICES[Number(e.target.value)]; e.target.value = '';
+  if (!o) return;
+  const withPrice = DOCS[doc.type].prices;
+  const item = { description: o.desc || o.label, qty: '', price: withPrice ? o.price : '' };
+  const empty = doc.items.findIndex((it) => !String(it.description || '').trim() && !String(it.price || '').trim());
+  if (empty >= 0) doc.items[empty] = item; else doc.items.push(item);
+  renderItems(); touch();
+  const rows = document.querySelectorAll('#items .item');
+  const row = rows[empty >= 0 ? empty : rows.length - 1];
+  const q = row && row.querySelector('input[data-k=qty]'); if (q) { q.placeholder = (o.unit || '').replace(/^Per\s+/i, 'e.g. 12 '); q.focus(); }
+});
+buildPricePick(); loadPriceSheet();
+
 bind(); fillForm(); renderPreview();
 if (!API_URL) {
   const b = $('#banner'); b.hidden = false;
