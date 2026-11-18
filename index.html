@@ -19,6 +19,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Cairo:wght@400;500;700&family=DM+Sans:wght@400;500;700&display=swap">
 <script src="config.js"></script>
+<script src="pricelist.js"></script>
 <style>
 :root{
   --ink:#10302B; --ink-2:#1B4E46; --ink-3:#0B2420;
@@ -136,6 +137,20 @@ input[type=range]{width:100%;margin:0;min-height:44px;accent-color:var(--ink);di
 .day span:last-child{font-size:14px;font-weight:400}
 .sum{font-family:var(--head);font-size:26px;line-height:1.2;font-weight:700}
 
+/* price list */
+.pl-cat{margin-top:32px}
+.pl-cat h3{font-size:22px;font-weight:700;margin-bottom:8px}
+.pl-scroll{overflow-x:auto;border-top:3px solid var(--ink);background:var(--white)}
+.pl-table{width:100%;border-collapse:collapse;font-size:16px}
+.pl-table th{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:start;padding:10px 12px;border-bottom:1px solid var(--line);font-weight:700}
+.pl-table td{padding:12px;border-bottom:1px solid var(--line);vertical-align:top}
+.pl-table td.sr{color:var(--muted);width:40px;font-variant-numeric:tabular-nums}
+.pl-table td.unit{color:var(--muted);white-space:nowrap}
+.pl-table td.pr,.pl-table th.pr{text-align:end;white-space:nowrap;font-weight:700;font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+.pl-table td.pr span{display:block}
+.pl-note{margin-top:32px;padding:20px 24px;border-inline-start:4px solid var(--brass);background:var(--white);display:flex;flex-wrap:wrap;gap:16px 24px;align-items:center;justify-content:space-between}
+.pl-note p{margin:0;flex:1 1 320px;min-width:0;font-weight:500}
+
 /* steps */
 .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:32px}
 .step{border-top:3px solid var(--ink);padding-top:16px;display:flex;flex-direction:column;gap:8px}
@@ -223,6 +238,7 @@ html[dir="rtl"] .card h3,html[dir="rtl"] .biz h3,html[dir="rtl"] .step h3{line-h
 <a href="#collections" data-i18n="nav_collections">Collections</a>
 <a href="#business" data-i18n="nav_business">For businesses</a>
 <a href="#estimate" data-i18n="nav_estimate">Price estimate</a>
+<a href="#pricelist" data-i18n="nav_prices">Price list</a>
 <a href="#book" data-i18n="nav_book">Book a visit</a>
 <a href="#faq" data-i18n="nav_faq">FAQ</a>
 <button type="button" class="lang" id="langBtn">العربية</button>
@@ -352,6 +368,18 @@ html[dir="rtl"] .card h3,html[dir="rtl"] .biz h3,html[dir="rtl"] .step h3{line-h
 <a class="btn btn-wa btn-lg" id="estWa" data-i18n="est_send">Send this estimate on WhatsApp</a>
 </div>
 </div>
+</div>
+</section>
+
+<section id="pricelist" class="sec" hidden>
+<div class="wrap">
+<div class="head">
+<p class="eyebrow" data-i18n="pl_eyebrow">Price list</p>
+<h2 class="h2" data-i18n="pl_h2">Our price list.</h2>
+<p class="lead" data-i18n="pl_lead">Prices in Omani Rial (OMR) for the most asked-for items.</p>
+</div>
+<div id="plBox"></div>
+<div class="pl-note"><p data-i18n="pl_note">These are approximate prices. The exact price is confirmed when you visit the shop or contact us on WhatsApp.</p><a class="btn btn-wa" data-wa="order" data-i18n="order_wa">Order on WhatsApp</a></div>
 </div>
 </section>
 
@@ -494,8 +522,8 @@ const DEFAULTS = {
     currency: 'OMR',
     currency_ar: 'ر.ع.',
     address: '',
-    hours: '9AM TO 1PM, 5PM TO 10PM', 
-    booking_slots: '10:00 AM, 12:00 PM, 4:00 PM, 6:00 PM, 8:00 PM',
+    hours: '',
+    booking_slots: '10:00 AM, 12:00 PM, 5:00 PM, 7:00 PM, 9:00 PM',
     booking_slots_ar: '10:00 ص, 12:00 م, 4:00 م, 6:00 م, 8:00 م',
     services: 'Visit the shop; Measuring at my home',
     services_ar: 'زيارة المعرض; أخذ المقاسات في منزلي',
@@ -516,6 +544,7 @@ const DEFAULTS = {
     { label: 'Double-layer curtains', label_ar: 'ستائر مزدوجة', carpet: false, rate: 0 },
     { label: 'Carpet', label_ar: 'سجاد', carpet: true, rate: 0 }
   ],
+  pricelist: window.PRICE_LIST_DEFAULT || [],
   gallery: [],
   reviews: [],
   faq: [
@@ -528,6 +557,7 @@ const DEFAULTS = {
 /* ---------- interface text ---------- */
 const T = {
   en: {
+    nav_prices: 'Price list', pl_eyebrow: 'Price list', pl_h2: 'Our price list.', pl_lead: 'Prices in Omani Rial (OMR) for the most asked-for items.', pl_note: 'These are approximate prices. The exact price is confirmed when you visit the shop or contact us on WhatsApp.', pl_sr: 'No.', pl_desc: 'Description', pl_unit: 'Unit', pl_price: 'Price (OMR)',
     nav_collections: 'Collections', nav_business: 'For businesses', nav_estimate: 'Price estimate', nav_book: 'Book a visit', nav_faq: 'FAQ',
     order_wa: 'Order on WhatsApp', fab: 'WhatsApp',
     hero_eyebrow: 'Home furnishing in Muscat',
@@ -571,6 +601,7 @@ const T = {
     zoom: 'View larger photo', lb_label: 'Photo viewer', lb_close: 'Close', lb_prev: 'Previous photo', lb_next: 'Next photo'
   },
   ar: {
+    nav_prices: 'قائمة الأسعار', pl_eyebrow: 'قائمة الأسعار', pl_h2: 'قائمة أسعارنا.', pl_lead: 'الأسعار بالريال العماني للأصناف الأكثر طلباً.', pl_note: 'هذه أسعار تقريبية. يتم تحديد السعر النهائي عند زيارة المعرض أو التواصل معنا عبر واتساب.', pl_sr: 'م', pl_desc: 'الوصف', pl_unit: 'الوحدة', pl_price: 'السعر (ر.ع)',
     nav_collections: 'المنتجات', nav_business: 'للشركات', nav_estimate: 'تقدير السعر', nav_book: 'احجز زيارة', nav_faq: 'الأسئلة الشائعة',
     order_wa: 'اطلب عبر واتساب', fab: 'واتساب',
     hero_eyebrow: 'مستلزمات المنزل في مسقط',
@@ -713,6 +744,10 @@ function mergeSheet(got) {
   if (got.collections && got.collections.length) d.collections = got.collections;
   if (got.prices && got.prices.length) {
     d.prices = got.prices.map((r) => ({ label: r.label, label_ar: r.label_ar, carpet: /^carpet/i.test(r.kind || ''), rate: parseFloat(r.rate) || 0 })).filter((p) => p.label);
+  }
+  if (got.pricelist && got.pricelist.length) {
+    const rows = got.pricelist.filter((r) => r.item && r.price && r.unit !== undefined);
+    if (rows.length) d.pricelist = rows;
   }
   if (got.gallery && got.gallery.length) d.gallery = got.gallery.filter((g) => safeUrl(g.image));
   if (got.reviews && got.reviews.length) d.reviews = got.reviews.filter((r) => r.text);
@@ -919,6 +954,28 @@ function renderReviews() {
     box.append(el('div', { class: 'rev' }, el('p', {}, pick(r, 'text')), name ? el('b', {}, name) : ''));
   });
 }
+function renderPriceList() {
+  const list = data.pricelist || [];
+  $('#pricelist').hidden = !list.length;
+  const box = $('#plBox'); box.replaceChildren();
+  const groups = []; const idx = {};
+  list.forEach((r) => {
+    const k = r.category || '';
+    if (!(k in idx)) { idx[k] = groups.length; groups.push({ r, rows: [] }); }
+    groups[idx[k]].rows.push(r);
+  });
+  let n = 0;
+  groups.forEach((g) => {
+    const head = el('tr', {}, el('th', {}, t('pl_sr')), el('th', {}, t('pl_desc')), el('th', {}, t('pl_unit')), el('th', { class: 'pr' }, t('pl_price')));
+    const body = g.rows.map((r) => {
+      n += 1;
+      const prices = String(r.price).split('/').map((x) => x.trim()).filter(Boolean).map((x) => el('span', {}, x));
+      return el('tr', {}, el('td', { class: 'sr' }, r.sr || String(n)), el('td', {}, pick(r, 'item')), el('td', { class: 'unit' }, pick(r, 'unit')), el('td', { class: 'pr' }, prices));
+    });
+    const cat = pick(g.r, 'category');
+    box.append(el('div', { class: 'pl-cat' }, cat ? el('h3', {}, cat) : '', el('div', { class: 'pl-scroll' }, el('table', { class: 'pl-table' }, el('thead', {}, head), el('tbody', {}, body)))));
+  });
+}
 function renderFaq() {
   const box = $('#faqList'); box.replaceChildren();
   data.faq.forEach((f, i) => {
@@ -955,7 +1012,7 @@ function renderBooking() {
 function renderAll() {
   applyStatic();
   renderLinks(); renderBrand(); renderHero(); renderVisit(); renderCollections(); renderEstimator();
-  renderGallery(); renderReviews(); renderFaq(); renderBooking();
+  renderPriceList(); renderGallery(); renderReviews(); renderFaq(); renderBooking();
 }
 function setLang(l) {
   lang = l;
@@ -970,7 +1027,7 @@ $('#langBtn').addEventListener('click', () => setLang(isAr() ? 'en' : 'ar'));
 renderAll();
 
 if (CONFIG.SHEET_ID) {
-  const names = ['Settings', 'Collections', 'Prices', 'Gallery', 'Reviews', 'FAQ'];
+  const names = ['Settings', 'Collections', 'Prices', 'PriceList', 'Gallery', 'Reviews', 'FAQ'];
   Promise.allSettled(names.map(loadTab)).then((res) => {
     const got = {};
     res.forEach((r, i) => { if (r.status === 'fulfilled') got[names[i].toLowerCase()] = r.value; else console.warn('Sheet tab not loaded:', names[i], r.reason); });
