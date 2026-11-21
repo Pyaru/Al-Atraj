@@ -126,6 +126,14 @@ label.f textarea{min-height:64px;resize:vertical}
 .sh-tbl td.d{white-space:pre-line;overflow-wrap:anywhere}
 .sh-tbl tr.pad td{height:26px}
 .sh-note{border:1px solid #000;border-top:0;padding:14px 18px;min-height:46px;font-weight:700;white-space:pre-line}
+.sh-words{margin:10px 0 0;font-weight:700;font-size:12px}
+.sh-bank{margin-top:14px;border:1px solid #000;font-size:11px;break-inside:avoid}
+.sh-bank h4{margin:0;text-align:center;font-size:12px;padding:5px;border-bottom:1px solid #000}
+.sh-bank .bk{display:grid;grid-template-columns:1fr 1fr}
+.sh-bank .bk div{padding:3px 10px}
+.sh-bank .tc{border-top:1px solid #000;padding:5px 10px}
+.sh-bank .tc b{display:block;margin-bottom:2px}
+.sh-bank .tc ol{margin:0;padding-left:16px}
 .sh-tot{margin:0 0 0 auto;width:46%;border-collapse:collapse}
 .sh-tot td{border:1px solid #000;border-top:0;padding:7px 8px;font-weight:700;font-size:12.5px}
 .sh-tot td.r{text-align:right;font-variant-numeric:tabular-nums}
@@ -262,6 +270,25 @@ label.f textarea{min-height:64px;resize:vertical}
 /* ---------- settings (company details and API link live in office-config.js) ---------- */
 const CFG = window.OFFICE_CONFIG || {};
 const API_URL = CFG.API_URL || '';
+const EXTRAS = Object.assign({ types: [], bank: [], terms: [] }, CFG.INVOICE_EXTRAS || {});
+function belowRiyals(n) {
+  const a = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+  const t = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+  const w = (x) => x < 20 ? a[x] : t[Math.floor(x / 10)] + (x % 10 ? '-' + a[x % 10] : '');
+  const h = (x) => (x >= 100 ? a[Math.floor(x / 100)] + ' hundred' + (x % 100 ? ' ' : '') : '') + (x % 100 ? w(x % 100) : '');
+  if (n === 0) return 'zero';
+  const parts = []; const sc = [[1e9, 'billion'], [1e6, 'million'], [1e3, 'thousand'], [1, '']];
+  sc.forEach(([v, name]) => { const q = Math.floor(n / v); if (q) { parts.push(h(q) + (name ? ' ' + name : '')); n -= q * v; } });
+  return parts.join(' ');
+}
+function amountWords(x) {
+  const total = Math.round(Number(x) * 1000); if (!isFinite(total) || total <= 0) return '';
+  const r = Math.floor(total / 1000); const b = total % 1000;
+  const cap = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+  let out = r ? cap(belowRiyals(r)) + ' Omani riyal' + (r === 1 ? '' : 's') : '';
+  if (b) out += (out ? ' and ' : '') + (r ? belowRiyals(b) : cap(belowRiyals(b))) + ' baisa';
+  return out + ' only';
+}
 const VAT_RATE = Number(CFG.VAT_RATE != null ? CFG.VAT_RATE : 5);
 const CURRENCY = CFG.CURRENCY || 'OMR';
 const COMPANY = Object.assign({
@@ -458,6 +485,12 @@ function sheetHTML() {
     (c.prices ? '<table class="sh-tot"><tr><td>SUB TOTAL (' + CURRENCY + ')</td><td class="r">' + money(t.sub) + '</td></tr>' +
       (doc.vat_on ? '<tr><td>' + esc(doc.vat_rate) + '% VAT</td><td class="r">' + money(t.vat) + '</td></tr>' : '') +
       '<tr><td>' + (doc.vat_on ? 'GRAND TOTAL' : 'TOTAL') + ' (' + CURRENCY + ')</td><td class="r">' + money(t.total) + '</td></tr></table>' : '') +
+    (c.prices && t.total > 0 && EXTRAS.types.includes(doc.type) ? '<div class="sh-words">In words: ' + esc(amountWords(t.total)) + '</div>' : '') +
+    (EXTRAS.types.includes(doc.type) && (EXTRAS.bank.some((r) => r[1]) || EXTRAS.terms.length) ?
+      '<div class="sh-bank">' +
+      (EXTRAS.bank.some((r) => r[1]) ? '<h4>BANK DETAILS</h4><div class="bk">' + EXTRAS.bank.filter((r) => r[1]).map((r) => '<div>' + esc(r[0]) + ': ' + esc(r[1]) + '</div>').join('') + '</div>' : '') +
+      (EXTRAS.terms.length ? '<div class="tc"><b>Terms &amp; condition:</b><ol>' + EXTRAS.terms.map((x) => '<li>' + esc(x) + '</li>').join('') + '</ol></div>' : '') +
+      '</div>' : '') +
     '<div class="sh-sign"><span>ISSUED BY:.......................................</span><span>RECEIVED BY:.......................</span>' + stamp + '</div>';
 }
 function renderPreview() {
