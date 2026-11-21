@@ -62,6 +62,21 @@ label.f textarea{min-height:64px;resize:vertical}
 .totals div{display:flex;justify-content:space-between;font-size:15px}
 .totals .g{font-size:18px;font-weight:700;border-top:2px solid var(--ink);padding-top:6px}
 
+/* payments, chips, search tabs */
+.chip{display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;font-weight:700;margin-inline-start:6px;vertical-align:1px}
+.chip.paid{background:#D7F0E2;color:#0C5C34}.chip.partial{background:#FFF0C2;color:#7A5400}.chip.unpaid{background:#FBDADA;color:#8E1F1F}
+.pay-sum{display:grid;gap:4px;font-variant-numeric:tabular-nums;margin-bottom:12px}
+.pay-sum div{display:flex;justify-content:space-between}
+.pay-sum .b{font-weight:700;font-size:18px;border-top:2px solid var(--ink);padding-top:4px}
+.pay-list{margin:0 0 12px;padding:0;list-style:none;display:grid;gap:6px}
+.pay-list li{display:flex;align-items:center;gap:8px;justify-content:space-between;border:1px solid var(--line);border-radius:4px;padding:6px 10px;font-size:14px}
+.pay-list button{min-height:36px;min-width:36px;background:none;border:1px solid var(--line);border-radius:4px;color:var(--red);cursor:pointer;font-size:18px}
+.pay-hint{color:var(--muted);font-size:14px}
+.results .tabs{display:flex;gap:6px;padding:8px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff}
+.results .tabs button{display:inline-block;width:auto;padding:6px 12px;border:2px solid var(--ink);border-radius:4px;font-weight:700;font-size:14px}
+.results .tabs button[aria-pressed=true]{background:var(--ink);color:#fff}
+.results .sum{padding:8px 14px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--line)}
+
 /* buttons */
 .btn{min-height:46px;padding:0 18px;border-radius:4px;border:2px solid var(--ink);background:#fff;color:var(--ink);font-weight:700;cursor:pointer}
 .btn.pri{background:var(--ink);color:#fff}
@@ -92,10 +107,10 @@ label.f textarea{min-height:64px;resize:vertical}
 .sh-logo{height:92px;width:auto;display:block}
 .sh-title{text-align:center;font-size:21px;text-decoration:underline;margin:26px 0 20px;font-weight:400;letter-spacing:.02em}
 .sh-two{display:flex;justify-content:space-between;gap:24px;margin-bottom:18px}
-.sh-party{flex:1;font-size:13px;line-height:1.5;white-space:pre-line}
+.sh-party{flex:1;min-width:0;font-size:13px;line-height:1.5;white-space:pre-line}
 .sh-party .nm{font-weight:700;font-size:14px;text-transform:uppercase}
 .sh-party .lb{font-size:11px;color:#555;text-transform:uppercase;letter-spacing:.06em}
-.sh-meta{flex:1;display:grid;grid-template-columns:auto 12px 1fr;gap:5px 0;font-size:13px;align-content:start}
+.sh-meta{flex:0 0 38%;margin-left:auto;display:grid;grid-template-columns:auto 12px 1fr;gap:5px 0;font-size:13px;align-content:start}
 .sh-meta .v{font-weight:400;overflow-wrap:anywhere}
 .sh-msg{margin:6px 0 16px;white-space:pre-line}
 .sh-tbl{width:100%;border-collapse:collapse;table-layout:fixed}
@@ -155,10 +170,15 @@ label.f textarea{min-height:64px;resize:vertical}
 <select id="type"></select></label>
 </div>
 
+<div class="card" id="convCard" hidden>
+<button type="button" class="btn pri" id="convBtn" style="width:100%"></button>
+<p class="pay-hint" style="margin:8px 0 0">Copies the customer and all items into a new Tax Invoice with its own number. The quotation stays as it is.</p>
+</div>
+
 <div class="card">
 <h2 id="partyTitle">Customer</h2>
 <div class="grid2">
-<label class="f" style="grid-column:1/-1">Name<input id="party_name" type="text" autocomplete="off"></label>
+<label class="f" style="grid-column:1/-1">Name<input id="party_name" type="text" autocomplete="off" list="custList"><datalist id="custList"></datalist></label>
 <label class="f" style="grid-column:1/-1">Address<textarea id="party_address" rows="2"></textarea></label>
 <label class="f">Mobile number<input id="party_phone" type="tel" inputmode="tel"></label>
 </div>
@@ -198,6 +218,11 @@ label.f textarea{min-height:64px;resize:vertical}
 <label class="f" style="grid-column:1/-1">Text on the document<textarea id="note" rows="2"></textarea></label>
 </div>
 <label class="check" id="vatRow"><input id="vat_on" type="checkbox"><span id="vatText">Add 5% VAT</span></label>
+</div>
+
+<div class="card" id="payCard" hidden>
+<h2>Payments</h2>
+<div id="payBody"></div>
 </div>
 
 <div class="card">
@@ -348,6 +373,7 @@ function fillForm() {
   $('#vatText').textContent = 'Add ' + doc.vat_rate + '% VAT';
   $('#show_stamp').checked = !!doc.show_stamp;
   renderItems();
+  refreshSide();
 }
 function renderItems() {
   const box = $('#items'); box.replaceChildren();
@@ -456,6 +482,8 @@ function bind() {
       touch();
     });
   });
+  $('#party_name').addEventListener('change', autofillCustomer);
+  $('#convBtn').addEventListener('click', () => { const from = doc.type + ' ' + doc.number; $('#type').value = 'Tax Invoice'; changeType('Tax Invoice'); toast('New Tax Invoice made from ' + from + '. Check it, then press Save.'); window.scrollTo({ top: 0, behavior: 'smooth' }); });
   $('#notePick').addEventListener('change', (e) => {
     if (e.target.value === 'Custom text') { $('#note').focus(); return; }
     doc.note = e.target.value; $('#note').value = doc.note; touch();
@@ -497,6 +525,8 @@ function changeType(type) {
     // converting a saved document (for example quotation to invoice) makes a new document
     mode = 'new'; numberAuto = true; doc.number = '';
     if (!doc.reference && oldType === 'Quotation') doc.reference = 'QUOTE NO ' + oldNumber;
+    if (!doc.reference && oldType === 'Proforma Invoice') doc.reference = 'PROFORMA NO ' + oldNumber;
+    doc.date = todayISO();
   } else if (numberAuto) doc.number = '';
   fillForm(); touch(); suggestNumber();
 }
@@ -525,7 +555,7 @@ async function saveDoc(quiet) {
     if (r.error === 'pin') { showGate('PIN is not correct.'); return false; }
     if (!r.ok) { toast('Could not save: ' + (r.message || r.error), { err: true }); setStatus(''); return false; }
     doc.number = r.number; $('#number').value = r.number; mode = 'update'; numberAuto = false; dirty = false; saved = true;
-    renderPreview(); setStatus('Saved ' + r.number);
+    renderPreview(); setStatus('Saved ' + r.number); rememberCustomer(); refreshSide();
     if (!quiet) toast((r.updated ? 'Updated ' : 'Saved ') + doc.type + ' ' + r.number);
     return true;
   } catch (e) {
@@ -541,28 +571,134 @@ async function ensureSaved() {
   return confirm('This document could not be saved. Continue anyway?');
 }
 
+function chipHTML(x) {
+  if (!x.status) return '';
+  const t = x.status === 'paid' ? 'Paid' : x.status === 'partial' ? 'Part paid · due ' + money(x.balance) : 'Unpaid';
+  return '<span class="chip ' + x.status + '">' + t + '</span>';
+}
 function bindSearch() {
-  const q = $('#q'); const box = $('#results'); let timer;
+  const q = $('#q'); const box = $('#results'); let timer; let tab = 'recent';
   const run = async () => {
     if (!API_URL) { box.hidden = false; box.innerHTML = '<div class="empty">Search needs the API link in office-config.js.</div>'; return; }
-    box.hidden = false; box.innerHTML = '<div class="empty">Searching…</div>';
+    box.hidden = false;
+    const text = q.value.trim();
+    const action = tab === 'unpaid' ? 'unpaid' : (text ? 'search' : 'recent');
+    const tabs = document.createElement('div'); tabs.className = 'tabs';
+    [['recent', 'Search / recent'], ['unpaid', 'Unpaid invoices']].forEach(([k, label]) => {
+      const bt = document.createElement('button'); bt.type = 'button'; bt.textContent = label; bt.setAttribute('aria-pressed', String(tab === k));
+      bt.addEventListener('click', () => { tab = k; run(); }); tabs.append(bt);
+    });
+    box.replaceChildren(tabs, Object.assign(document.createElement('div'), { className: 'empty', textContent: 'Loading…' }));
     try {
-      const r = await api(q.value.trim() ? 'search' : 'recent', { q: q.value.trim() });
+      const r = await api(action, { q: text });
       if (r.error === 'pin') { showGate('PIN is not correct.'); return; }
-      if (!r.ok) { box.innerHTML = '<div class="empty">Could not search.</div>'; return; }
-      if (!r.results.length) { box.innerHTML = '<div class="empty">No document found.</div>'; return; }
-      box.replaceChildren(...r.results.map((x) => {
+      if (!r.ok) { box.replaceChildren(tabs, Object.assign(document.createElement('div'), { className: 'empty', textContent: 'Could not load.' })); return; }
+      const out = [tabs];
+      if (!r.results.length) out.push(Object.assign(document.createElement('div'), { className: 'empty', textContent: tab === 'unpaid' ? 'No unpaid invoices. Everything is paid.' : 'No document found.' }));
+      if (tab === 'unpaid' && r.results.length) {
+        const due = r.results.reduce((a, x) => a + (Number(x.balance) || 0), 0);
+        out.push(Object.assign(document.createElement('div'), { className: 'sum', textContent: r.results.length + ' unpaid · total due ' + CURRENCY + ' ' + money(due) + ' (oldest first)' }));
+      }
+      r.results.forEach((x) => {
         const b = document.createElement('button'); b.type = 'button';
-        b.innerHTML = '<div class="n">' + esc(x.number) + ' · ' + esc(x.type) + '</div><div class="m">' + esc(fmtDate(x.date)) + ' · ' + esc(x.party_name) + ' · ' + CURRENCY + ' ' + money(x.total || 0) + '</div>';
+        b.innerHTML = '<div class="n">' + esc(x.number) + ' · ' + esc(x.type) + chipHTML(x) + '</div><div class="m">' + esc(fmtDate(x.date)) + ' · ' + esc(x.party_name) + ' · ' + CURRENCY + ' ' + money(x.total || 0) + '</div>';
         b.addEventListener('click', () => { box.hidden = true; q.value = ''; openDoc(x.type, x.number); });
-        return b;
-      }));
-    } catch (e) { box.innerHTML = '<div class="empty">No connection.</div>'; }
+        out.push(b);
+      });
+      box.replaceChildren(...out);
+    } catch (e) { box.replaceChildren(tabs, Object.assign(document.createElement('div'), { className: 'empty', textContent: 'No connection.' })); }
   };
-  q.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(run, 300); });
+  q.addEventListener('input', () => { tab = 'recent'; clearTimeout(timer); timer = setTimeout(run, 300); });
   q.addEventListener('focus', run);
-  document.addEventListener('click', (e) => { if (!e.target.closest('.search')) box.hidden = true; });
+  document.addEventListener('click', (e) => { if (e.target.isConnected && !e.target.closest('.search')) box.hidden = true; });
   q.addEventListener('keydown', (e) => { if (e.key === 'Escape') { box.hidden = true; q.blur(); } });
+}
+
+/* ---------- customers (autofill) ---------- */
+let CUSTOMERS = [];
+function renderCustomers() {
+  const dl = $('#custList'); dl.replaceChildren();
+  CUSTOMERS.forEach((c) => { const o = document.createElement('option'); o.value = c.name; dl.append(o); });
+}
+async function loadCustomers() {
+  if (!API_URL) return;
+  try { const r = await api('customers'); if (r.ok) { CUSTOMERS = r.customers; renderCustomers(); } } catch (e) { /* offline: no suggestions */ }
+}
+function rememberCustomer() {
+  const name = String(doc.party_name || '').trim(); if (!name) return;
+  const i = CUSTOMERS.findIndex((c) => c.name.toLowerCase() === name.toLowerCase());
+  const rec = { name, address: doc.party_address || '', phone: doc.party_phone || '' };
+  if (i >= 0) CUSTOMERS[i] = rec; else { CUSTOMERS.push(rec); CUSTOMERS.sort((a, b) => a.name.localeCompare(b.name)); }
+  renderCustomers();
+}
+function autofillCustomer() {
+  const name = $('#party_name').value.trim().toLowerCase(); if (!name) return;
+  const c = CUSTOMERS.find((x) => x.name.toLowerCase() === name); if (!c) return;
+  if (!doc.party_address && c.address) { doc.party_address = c.address; $('#party_address').value = c.address; }
+  if (!doc.party_phone && c.phone) { doc.party_phone = c.phone; $('#party_phone').value = c.phone; }
+  doc.party_name = c.name; $('#party_name').value = c.name; touch();
+}
+
+/* ---------- convert and payments ---------- */
+const PAYABLE = ['Tax Invoice', 'Proforma Invoice', 'Cash Memo'];
+let payToken = 0;
+function refreshSide() {
+  const conv = mode === 'update' && (doc.type === 'Quotation' || doc.type === 'Proforma Invoice');
+  $('#convCard').hidden = !conv;
+  if (conv) $('#convBtn').textContent = 'Make a Tax Invoice from this ' + doc.type;
+  refreshPay();
+}
+async function refreshPay() {
+  const card = $('#payCard'); const body = $('#payBody');
+  if (!API_URL || !PAYABLE.includes(doc.type)) { card.hidden = true; return; }
+  card.hidden = false;
+  if (mode !== 'update') { body.innerHTML = '<p class="pay-hint">Save this document first. Then you can record payments here.</p>'; return; }
+  const my = ++payToken;
+  body.innerHTML = '<p class="pay-hint">Loading payments…</p>';
+  try {
+    const r = await api('payments', { type: doc.type, number: doc.number });
+    if (my !== payToken) return;
+    if (!r.ok) { body.innerHTML = '<p class="pay-hint">Payments could not be loaded.</p>'; return; }
+    renderPay(r);
+  } catch (e) { if (my === payToken) body.innerHTML = '<p class="pay-hint">No connection.</p>'; }
+}
+function renderPay(r) {
+  const body = $('#payBody');
+  const label = r.status === 'paid' ? 'Paid in full' : r.status === 'partial' ? 'Part paid' : 'Unpaid';
+  body.innerHTML =
+    '<div class="pay-sum"><div><span>Saved total</span><span>' + CURRENCY + ' ' + money(r.total) + '</span></div>' +
+    '<div><span>Received</span><span>' + CURRENCY + ' ' + money(r.paid) + '</span></div>' +
+    '<div class="b"><span>Balance due <span class="chip ' + r.status + '">' + label + '</span></span><span>' + CURRENCY + ' ' + money(r.balance) + '</span></div></div>' +
+    (dirty ? '<p class="pay-hint">You changed this document. Press Save so the total above is up to date.</p>' : '') +
+    '<ul class="pay-list" id="payList"></ul>' +
+    '<div class="grid2">' +
+    '<label class="f">Amount (' + CURRENCY + ')<input id="payAmt" type="text" inputmode="decimal" value="' + (r.balance > 0 ? String(r.balance) : '') + '"></label>' +
+    '<label class="f">Method<select id="payMethod"><option>Cash</option><option>Bank transfer</option><option>Cheque</option><option>Card</option></select></label>' +
+    '<label class="f">Date<input id="payDate" type="date" value="' + todayISO() + '"></label>' +
+    '<label class="f">Note<input id="payNote" type="text" placeholder="cheque number, reference"></label></div>' +
+    '<button type="button" class="btn pri" id="payBtn" style="width:100%;margin-top:12px">Add payment</button>';
+  const list = $('#payList');
+  if (!r.payments.length) list.innerHTML = '<li class="pay-hint">No payment yet.</li>';
+  r.payments.forEach((p) => {
+    const li = document.createElement('li');
+    li.innerHTML = '<span>' + esc(fmtDate(p.date)) + ' · ' + esc(p.method || '') + (p.note ? ' · ' + esc(p.note) : '') + '</span><b>' + money(p.amount) + '</b>';
+    const del = document.createElement('button'); del.type = 'button'; del.textContent = '×'; del.setAttribute('aria-label', 'Remove this payment');
+    del.addEventListener('click', async () => {
+      if (!confirm('Remove this payment of ' + money(p.amount) + '?')) return;
+      try { const x = await api('delpay', { id: p.id }); if (x.ok) renderPay(x); else toast('Could not remove.', { err: true }); } catch (e) { toast('No connection.', { err: true }); }
+    });
+    li.append(del); list.append(li);
+  });
+  $('#payBtn').addEventListener('click', async () => {
+    const amt = Number(String($('#payAmt').value).replace(/,/g, ''));
+    if (!isFinite(amt) || amt <= 0) { toast('Enter the amount received.', { err: true }); return; }
+    if (amt > r.balance + 0.0005 && !confirm('This is more than the balance of ' + money(r.balance) + '. Add it anyway?')) return;
+    const bt = $('#payBtn'); bt.disabled = true;
+    try {
+      const x = await api('pay', { type: doc.type, number: doc.number, amount: amt, method: $('#payMethod').value, date: $('#payDate').value, note: $('#payNote').value });
+      if (x.ok) { renderPay(x); toast('Payment of ' + money(amt) + ' added.'); } else { toast('Could not add: ' + (x.message || x.error), { err: true }); bt.disabled = false; }
+    } catch (e) { toast('No connection.', { err: true }); bt.disabled = false; }
+  });
 }
 async function openDoc(type, number) {
   try {
@@ -648,7 +784,7 @@ function showGate(msg) { $('#gate').hidden = false; $('#pinErr').textContent = m
 async function tryPin(pin) {
   PIN_VALUE = pin;
   const r = await api('auth');
-  if (r.ok) { $('#gate').hidden = true; return true; }
+  if (r.ok) { $('#gate').hidden = true; loadCustomers(); return true; }
   return false;
 }
 $('#gateForm').addEventListener('submit', async (e) => {
